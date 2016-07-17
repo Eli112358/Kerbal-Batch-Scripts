@@ -9,6 +9,7 @@ SetProfile.cmd does NOT ensure anything exists (planned future feature), so plea
 I might create a script to do most or all of this automaticlly.
 
 It might work fine to do this in the game's install location, but I haven't tested it myself. I recommend creating a folder somewhere in your user profile (C:\Users\user_name) and name it something relating to KSP.
+
 1. Move the "GameData" folder from the KSP install folder to the root of this new folder (refered to as "KSP Files" from now on); this usually takes a while.
 2. Also in "KSP Files", create a folder named "Profiles" or something similar (this folder's path will be the value for the `kspProfiles` environment variable).
 3. I'd also recommend creating a folder named "saves" and moving the "senarios" and "training" folders into it, or just move them to the "KSP Files" folder (you'll see why later).

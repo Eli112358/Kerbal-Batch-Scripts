@@ -2,8 +2,8 @@
 Some useful Batch scripts for Kerbal Space Program (WIP)
 
 ## Progress
-Kcli.cmd can only load and display data; modify and save are planned future features.
-SetProfile.cmd does NOT ensure anything exists (planned future feature), so please create the profile(s) and set the environtment variables first.
+KspDataCli.cmd can only load and display data; modify and save are planned future features.
+KspProfiles.cmd does NOT ensure anything exists (planned future feature), so please create the profile(s) and set the environtment variables first.
 
 ## Setting up
 I might create a script to do most or all of this automaticlly.
@@ -21,7 +21,7 @@ It might work fine to do this in the game's install location, but I haven't test
 9. In each profile's "saves" folder, create symbolic links for "senarios" and "training", respectively: `for /f %I in (senarios training) do @mklink/d %I ..\..\..\saves\%I`
 10. Last manual folder interaction: move all your saved games to their respactive profile's "saves" folder.
 11. Now open the control panel and goto "System and Security" > "System" > (left panel) "Advenced system settings" > (at the bottom) "Environment variables".
-12. I'd recommend setting these for the current user only: `kspInstall=C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program` and `kspProfiles=C:\Users\user_name\KSP Files\Profiles`
+12. I'd recommend setting these for the current user only: `kspInstall=C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program` and `kspProfiles=C:\Users\user_name\KSP Files\Profiles` or where-ever you did these steps at.
 
-Now all you have to do is simply run `SetProfile.cmd [profile_name]` from an elevated command prompt (cmd > run as admin).
-When you want to play without mods, just `SetProfile Vanilla`. Always use an elevated command prompt for `SetProfile.cmd`, otherwise it won't work.
+Now all you have to do is simply run `KspProfiles.cmd [profile_name]` from an elevated command prompt (cmd > run as admin).
+When you want to play without mods, just do `KspProfiles Vanilla`. Always use an elevated command prompt for `KspProfiles.cmd`, otherwise it won't work.

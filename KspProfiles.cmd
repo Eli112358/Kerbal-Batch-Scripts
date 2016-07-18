@@ -10,6 +10,7 @@ if defined kspInstall goto setupFolders
 for "delims=;" %%I in (\Program Files;\Program Files (x86)) do if exist %%I (pushd %%I & call :setupEnv %%I & popd)
 setx kspInstall "%kspInstall%"
 setx kspProfiles "%kspProfiles%"
+path %path%;%kspProfiles%
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I"
 md Profiles\Vanilla

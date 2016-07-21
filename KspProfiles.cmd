@@ -1,4 +1,8 @@
 @echo off
+set tst=C:\deleteMe.tmp
+(type nul>%tst%) 2>nul && (del %tst% & set isElevated=t) || (set isElevated=)
+if not defined isElevated (echo Please run this from an elevated command prompt. &exit/b)
+set tst=
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
 rem This is only temporary:

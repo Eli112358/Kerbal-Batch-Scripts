@@ -3,6 +3,8 @@ set tst=C:\deleteMe.tmp
 (type nul>%tst%) 2>nul && (del %tst% & set isElevated=t) || (set isElevated=)
 if not defined isElevated (echo Please run this from an elevated command prompt. &exit/b)
 set tst=
+set "kspProfilesLogs=%cd%\kspProfiles.log"
+(type nul>%kspProfilesLogs%) 2>nul
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
 rem This is only temporary:
@@ -16,21 +18,21 @@ setx kspInstall "%kspInstall%"
 setx kspProfiles "%kspProfiles%"
 path %path%;%kspProfiles%
 :setupFolders
-for %%I in (GameData saves) do move "%kspInstall%\%%I"
-md Profiles\Vanilla
-for /f %%I in ('dir/b GameData') do if not %%I==Squad md Profiles\Modded 2>nul
-for /f %%I in ('dir/b Profiles') do for %%J in (GameData saves) do md Profiles\%%I\%%J
-for /f %%I in ('dir/b Profiles') do mklink/d Profiles\%%I\GameData\Squad
-if exist Profiles\Modded for /f %%I in ('dir/b/a:d GameData') do mklink/d Profiles\Modded\GameData\%%I %%I
-if exist Profiles\Modded if exist GameData\ModuleManager*.dll for /f %%I in ('dir/b/a:-d GameData\ModuleManager*') do mklink/h Profiles\Modded\GameData\%%I %%I
-for /f %%I in ('dir/b Profiles') do for %%J in (senarios training) do mklink/d Profiles\%%I\saves\%%J saves\%%J
+for %%I in (GameData saves) do move "%kspInstall%\%%I" 2>>%kspProfilesLogs%
+md Profiles\Vanilla 2>>%kspProfilesLogs%
+for /f %%I in ('dir/b GameData ^2>>%kspProfilesLogs%') do if not %%I==Squad md Profiles\Modded 2>>%kspProfilesLogs%
+for /f %%I in ('dir/b Profiles ^2>>%kspProfilesLogs%') do for %%J in (GameData saves) do md Profiles\%%I\%%J 2>>%kspProfilesLogs%
+for /f %%I in ('dir/b Profiles ^2>>%kspProfilesLogs%') do mklink/d Profiles\%%I\GameData\Squad 2>>%kspProfilesLogs%
+if exist Profiles\Modded for /f %%I in ('dir/b/a:d GameData ^2>>%kspProfilesLogs%') do mklink/d Profiles\Modded\GameData\%%I %%I 2>>%kspProfilesLogs%
+if exist Profiles\Modded if exist GameData\ModuleManager*.dll for /f %%I in ('dir/b/a:-d GameData\ModuleManager* ^2>>%kspProfilesLogs%') do mklink/h Profiles\Modded\GameData\%%I %%I 2>>%kspProfilesLogs%
+for /f %%I in ('dir/b Profiles ^2>>%kspProfilesLogs%') do for %%J in (senarios training) do mklink/d Profiles\%%I\saves\%%J saves\%%J 2>>%kspProfilesLogs%
 exit/b
 :setupEnv
 pushd %1
-for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>nul') do set "kspInstall=%%~I"
+for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>>%kspProfilesLogs%') do set "kspInstall=%%~I"
 popd
 exit/b
 :set
 pushd "%kspInstall%"
-for %%I in (GameData saves) do rd %%I &mklink/d %%I "%kspProfiles%\%*\%%I"
+for %%I in (GameData saves) do rd %%I 2>>%kspProfilesLogs% &mklink/d %%I "%kspProfiles%\%*\%%I" 2>>%kspProfilesLogs%
 popd

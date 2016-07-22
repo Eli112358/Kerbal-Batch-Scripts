@@ -3,7 +3,7 @@ Some useful Batch scripts for Kerbal Space Program (WIP)
 
 ## Progress
 KspDataCli.cmd can only load and display data; modify and save are planned future features.
-KspProfiles.cmd does NOT ensure anything exists (planned future feature), so please create the profile(s) and set the environtment variables first.
+KspProfiles.cmd sets up the necessary folders and variables on first run
 
 ## Setting up
 Extract all scripts to a folder and run the `KspProfiles.cmd` script as admin.

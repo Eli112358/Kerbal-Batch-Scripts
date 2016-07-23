@@ -18,12 +18,12 @@ setx kspProfiles "%kspProfiles%"
 path %path%;%kspProfiles%
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I" 2>>%kspProfilesLogs%
-md Profiles\Vanilla 2>>%kspProfilesLogs%
-for /f %%I in ('dir/b GameData ^2>>%kspProfilesLogs%') do if not %%I==Squad md Profiles\Modded 2>>%kspProfilesLogs%
-for /f %%I in ('dir/b Profiles ^2>>%kspProfilesLogs%') do call :setupProfile %%I
+call :create Vanilla
+for /f %%I in ('dir/b GameData ^2>>%kspProfilesLogs%') do if not %%I==Squad call :create Modded
 if exist Profiles\Modded (( for /f %%I in ('dir/b/a:d GameData ^2>>%kspProfilesLogs%') do call :addMod Modded %%I) & call :addModuleManager Modded )
 exit/b
-:setupProfile
+:create
+md Profiles\%1 2>>%kspProfilesLogs%
 for %%J in (GameData saves) do md Profiles\%1\%%J 2>>%kspProfilesLogs%
 mklink/d Profiles\%%I\GameData\Squad 2>>%kspProfilesLogs%
 for %%J in (senarios training) do mklink/d Profiles\%1\saves\%%J saves\%%J 2>>%kspProfilesLogs%

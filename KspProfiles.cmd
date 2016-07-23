@@ -8,7 +8,7 @@ set "kspProfilesLogs=%cd%\kspProfiles.log"
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
 rem This is only temporary:
-call :set %*
+call :activate %*
 exit/b
 :setup
 set "kspProfiles=%~0dp"
@@ -32,7 +32,7 @@ pushd %1
 for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>>%kspProfilesLogs%') do set "kspInstall=%%~I"
 popd
 exit/b
-:set
+:activate
 pushd "%kspInstall%"
 for %%I in (GameData saves) do rd %%I 2>>%kspProfilesLogs% &mklink/d %%I "%kspProfiles%\%*\%%I" 2>>%kspProfilesLogs%
 popd

@@ -7,6 +7,9 @@ set "kspProfilesLogs=%cd%\kspProfiles.log"
 (type nul>%kspProfilesLogs%) 2>nul
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
+set "tempVar=%~1"
+if not "%tempVar%"=="%tempVar:setup=%" call :setup & exit/b
+set tempVar=
 call :%*
 exit/b
 :setup

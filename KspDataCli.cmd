@@ -7,6 +7,7 @@ jjs -scripting "%~f0" -- %*
 exit/b
 */0;
 var alphaNum='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+var fieldDelim=' = ';
 function loadDataFile(file){
 	var node=new Object();
 	node.fields=new Array();
@@ -75,18 +76,23 @@ function getFieldIndex(node,name){
 	for(var f in node.fields)if(node.fields[f].indexOf(name)==0)return f;
 	return -1;
 }
+function getFieldName(node,index){
+	var f=node.fields[index];
+	return f.substring(0,f.indexOf(fieldDelim));
+}
 function getFieldValue(node,index){
 	var f=node.fields[index];
-	var delim=' = ';
-	return f.substring(f.indexOf(delim)+delim.length);
+	return f.substring(f.indexOf(fieldDelim)+fieldDelim.length);
 }
-function modify(node,args){}
+function setFieldValue(node,index,newValue){
+	node.fields[index]=getFieldName+fieldDelim+newValue;
+}
 function saveFile(obj,args){}
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
 var obj=loadDataFile($ARG[0]),node=obj;
-var cmds=['exit','help','select','list','modify','save','eval'];
+var cmds=['exit','help','select','list','set','save','eval'];
 var cnp=new Array(); //current node path
 while(cmd!=="exit"){
 	var rawInput=readLine("${cnp.join('.')}>");
@@ -112,8 +118,8 @@ while(cmd!=="exit"){
 		case 3: //list
 			list(node,args);
 			break;
-		case 4: //modify
-			modify(node,args);
+		case 4: //set
+			setFieldValue(node,args[0],args[1]);
 			break;
 		case 5: //save
 			save(obj,args);

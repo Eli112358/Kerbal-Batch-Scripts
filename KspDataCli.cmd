@@ -1,9 +1,8 @@
 0</* ::
 @echo off
 rem Polyglot from https://gist.github.com/yaauie/959862
-title Kerbal Command Line Interface
-echo Starting Kerbal Command Line Interface ...
-echo [reminder] Don't forget to put me on Github when my development is complete!
+title Kerbal Data Command Line Interface
+echo Starting Kerbal Data Command Line Interface ...
 jjs -scripting "%~f0" -- %*
 exit/b
 */0;
@@ -14,8 +13,8 @@ function loadDataFile(file){
 	node.nodes=new Array();
 	var line='',nodeStack=new Array();
 	var lines=readFully(file).replace(/\t+/g,'').replace(/\r\n{/g,'').split('\r\n');
-	for(var x=0;x<lines.length;x++){
-		line=lines[x];
+	for(var l in lines){
+		line=lines[l];
 		if(line.isEmpty())continue;
 		if(line.contains('='))node.fields.push(line);
 		else if(line=='}'){

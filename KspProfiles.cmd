@@ -14,10 +14,10 @@ call :%*
 exit/b
 :setup
 set "kspProfiles=%~0dp"
+setx kspProfiles "%kspProfiles%"
 if defined kspInstall goto setupFolders
 for "delims=;" %%I in (\Program Files;\Program Files (x86)) do if exist %%I (pushd %%I & call :setupEnv %%I & popd)
 setx kspInstall "%kspInstall%"
-setx kspProfiles "%kspProfiles%"
 path %path%;%kspProfiles%
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I" 2>>%kspProfilesLogs%
@@ -25,16 +25,16 @@ call :create Vanilla
 for /f %%I in ('dir/b GameData ^2>>%kspProfilesLogs%') do if not %%I==Squad call :create Modded
 if exist Profiles\Modded (( for /f %%I in ('dir/b/a:d GameData ^2>>%kspProfilesLogs%') do call :addMod Modded %%I) & call :addModuleManager Modded )
 exit/b
+:setupEnv
+pushd %1
+for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>>%kspProfilesLogs%') do set "kspInstall=%%~I"
+popd
+exit/b
 :create
 md Profiles\%1 2>>%kspProfilesLogs%
 for %%J in (GameData saves) do md Profiles\%1\%%J 2>>%kspProfilesLogs%
 mklink/d Profiles\%%I\GameData\Squad 2>>%kspProfilesLogs%
 for %%J in (senarios training) do mklink/d Profiles\%1\saves\%%J saves\%%J 2>>%kspProfilesLogs%
-exit/b
-:setupEnv
-pushd %1
-for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>>%kspProfilesLogs%') do set "kspInstall=%%~I"
-popd
 exit/b
 :addMod
 mklink/d Profiles\%1\GameData\%2 GameData\%2 2>>%kspProfilesLogs%

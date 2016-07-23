@@ -7,8 +7,7 @@ set "kspProfilesLogs=%cd%\kspProfiles.log"
 (type nul>%kspProfilesLogs%) 2>nul
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
-rem This is only temporary:
-call :activate %*
+call :%*
 exit/b
 :setup
 set "kspProfiles=%~0dp"

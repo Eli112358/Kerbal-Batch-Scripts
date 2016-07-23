@@ -13,4 +13,4 @@ Extract all scripts to a folder and run the `KspProfiles.cmd` script as admin.
 The `KspDataCli` script requires java runtime environment.
 
 ## Note
-When you want to play without mods, just do `KspProfiles Vanilla`. Always use an elevated command prompt for `KspProfiles.cmd`, otherwise it won't work.
+When you want to play without mods, just do `KspProfiles activate Vanilla`. Always use an elevated command prompt for `KspProfiles.cmd`, otherwise it won't work.

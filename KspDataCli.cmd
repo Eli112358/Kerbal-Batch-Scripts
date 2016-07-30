@@ -87,7 +87,12 @@ function getFieldValue(node,index){
 function setFieldValue(node,index,newValue){
 	node.fields[index]=getFieldName+fieldDelim+newValue;
 }
-function saveFile(obj,args){}
+function saveFile(args){
+	var now=new Date().toString();
+	var s=$ARG[0],i=s.lastIndexOf('.');
+	var backupFileName=s.substring(0,i)+'-backup-'+now.substring(0,now.indexOf(' GMT')).replace(/([ :])+/g,'-')+s.substring(i);
+	$EXEC('ren "${$ARG[0]}" "${backupFileName}"');
+}
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
@@ -122,7 +127,7 @@ while(cmd!=="exit"){
 			setFieldValue(node,args[0],args[1]);
 			break;
 		case 5: //save
-			save(obj,args);
+			saveFile(args);
 			break;
 		case 6: //eval
 			eval(args.join(' '));

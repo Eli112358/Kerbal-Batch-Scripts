@@ -7,6 +7,7 @@ set "kspProfilesLogs=%cd%\kspProfiles.log"
 (type nul>"%kspProfilesLogs%") 2>nul
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
+if "%~1"=="" goto help
 set "tempVar=%~1"
 if not "%tempVar%"=="%tempVar:setup=%" call :setup & exit/b
 set tempVar=
@@ -51,3 +52,11 @@ exit/b
 pushd "%kspInstall%"
 for %%I in (GameData saves) do rd %%I 2>>"%kspProfilesLogs%" &mklink/d %%I "%kspProfiles%\%*\%%I" 2>>"%kspProfilesLogs%"
 popd
+exit/b
+:help
+echo Usage:
+echo.  %~n0 activate ^<profile^>             make KSP use this profile
+echo.  %~n0 create ^<profile^>               create new profile
+echo.  %~n0 addMod ^<profile^> ^<mod^>         add a mod to a profile
+echo.  %~n0 addModuleManager ^<profile^>     add the ModuleManager mod to a profile
+echo.  %~n0 help                           display this help message

@@ -2,15 +2,26 @@
 Some useful Batch scripts for Kerbal Space Program (WIP)
 
 ## Progress
-KspDataCli.cmd can only load and display data; modify and save are planned future features.
-KspProfiles.cmd sets up the necessary folders and variables on first run
+`KspDataCli` can load, display, modify and save data files<br>
+`KspProfiles` sets up the necessary folders and variables on first run
 
 ## Setting up
-Extract all scripts to a folder and run the `KspProfiles.cmd` script as admin.
-
+Extract all scripts to a folder and run `KspProfiles.cmd` as admin.
 
 ## Requirements
-The `KspDataCli` script requires java runtime environment.
+`KspDataCli` requires java runtime environment<br>
+`KspProfiles` must be called from an elevated command prompt<br>
+**Each will check for their requirements and report if they're not found
 
-## Note
-When you want to play without mods, just do `KspProfiles activate Vanilla`. Always use an elevated command prompt for `KspProfiles.cmd`, otherwise it won't work.
+## Usage
+When you want to play without mods, just do `KspProfiles activate Vanilla`.
+
+Current cammands in `KspDataCli`:
+
+- select [..|number]
+- list
+- set &lt;number&gt; &lt;text&gt;
+- save
+- eval &lt;text&gt;
+- help [command]
+- exit

@@ -6,6 +6,8 @@ echo Starting Kerbal Data Command Line Interface ...
 jjs -scripting "%~f0" -- %*
 exit/b
 */0;
+var BufferedWriter=Java.type('java.io.BufferedWriter');
+var FileWriter=Java.type('java.io.FileWriter');
 var alphaNum='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
 var fieldDelim=' = ';
 function loadDataFile(file){
@@ -84,14 +86,39 @@ function getFieldValue(node,index){
 	var f=node.fields[index];
 	return f.substring(f.indexOf(fieldDelim)+fieldDelim.length);
 }
-function setFieldValue(node,index,newValue){
-	node.fields[index]=getFieldName+fieldDelim+newValue;
+function setFieldValue(node,args){
+	var i=(args.splice(0,1))[0];
+	node.fields[i]=getFieldName(node,i)+fieldDelim+args.join(' ');
 }
 function saveFile(args){
 	var now=new Date().toString();
 	var s=$ARG[0],i=s.lastIndexOf('.');
 	var backupFileName=s.substring(0,i)+'-backup-'+now.substring(0,now.indexOf(' GMT')).replace(/([ :])+/g,'-')+s.substring(i);
-	$EXEC('ren "${$ARG[0]}" "${backupFileName}"');
+	$EXEC("cmd /c \"ren ${$ARG[0]} ${backupFileName}\"");
+	print("Saving...");
+	var bw=new BufferedWriter(new FileWriter($ARG[0]));
+	var sNode=obj,numTabs=0;
+	saveNode(sNode);
+	bw.close();
+	print("Done!");
+	function getIndent(){return Array(numTabs+1).join('\t')}
+	function printToFile(s){
+		bw.write(s+'\n');
+		bw.flush();
+	}
+	function saveNode(n){
+		if(typeof n.label=='undefined'||n.label=='undefined'){
+			saveNode(n.nodes[0]);
+			return;
+		}
+		printToFile("${getIndent()}${n.label}");
+		printToFile("${getIndent()}{");
+		numTabs++;
+		for(var x in n.fields){printToFile("${getIndent()}${n.fields[x]}")}
+		for(var x in n.nodes){saveNode(n.nodes[x])}
+		numTabs--;
+		printToFile("${getIndent()}}");
+	}
 }
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
@@ -124,7 +151,7 @@ while(cmd!=="exit"){
 			list(node,args);
 			break;
 		case 4: //set
-			setFieldValue(node,args[0],args[1]);
+			setFieldValue(node,args);
 			break;
 		case 5: //save
 			saveFile(args);

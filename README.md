@@ -22,6 +22,7 @@ Current cammands in `KspDataCli`:
 - list
 - set &lt;number&gt; &lt;text&gt;
 - save
+- reload
 - eval &lt;text&gt;
 - help [command]
 - exit

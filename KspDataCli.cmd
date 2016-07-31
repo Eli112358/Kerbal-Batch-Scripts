@@ -120,12 +120,20 @@ function saveFile(args){
 		printToFile("${getIndent()}}");
 	}
 }
+function reload(){
+	print("Reloading data from file...");
+	obj=loadDataFile($ARG[0]);
+	cnp=new Array();
+	print("Reload complete.");
+}
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
-var obj=loadDataFile($ARG[0]),node=obj;
-var cmds=['exit','help','select','list','set','save','eval'];
-var cnp=new Array(); //current node path
+var obj;
+reload();
+var node=obj;
+var cmds=['exit','help','select','list','set','save','reload','eval'];
+var cnp; //current node path
 while(cmd!=="exit"){
 	var rawInput=readLine("${cnp.join('.')}>");
 	var cmd='',args='';
@@ -156,7 +164,10 @@ while(cmd!=="exit"){
 		case 5: //save
 			saveFile(args);
 			break;
-		case 6: //eval
+		case 6: //reload
+			reload();
+			break;
+		case 7: //eval
 			eval(args.join(' '));
 			break;
 		default: //unknown

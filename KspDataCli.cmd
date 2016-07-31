@@ -91,9 +91,9 @@ function setFieldValue(node,args){
 	node.fields[i]=getFieldName(node,i)+fieldDelim+args.join(' ');
 }
 function saveFile(args){
-	var now=new Date().toString();
+	var now=new Date().toISOString();
 	var s=$ARG[0],i=s.lastIndexOf('.');
-	var backupFileName=s.substring(0,i)+'-backup-'+now.substring(0,now.indexOf(' GMT')).replace(/([ :])+/g,'-')+s.substring(i);
+	var backupFileName=s.substring(0,i)+'-backup'+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
 	$EXEC("cmd /c \"ren ${$ARG[0]} ${backupFileName}\"");
 	print("Saving...");
 	var bw=new BufferedWriter(new FileWriter($ARG[0]));
@@ -103,7 +103,7 @@ function saveFile(args){
 	print("Done!");
 	function getIndent(){return Array(numTabs+1).join('\t')}
 	function printToFile(s){
-		bw.write(s+'\n');
+		bw.write(s+'\r\n');
 		bw.flush();
 	}
 	function saveNode(n){

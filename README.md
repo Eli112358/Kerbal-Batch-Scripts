@@ -1,5 +1,5 @@
 # Kerbal-Batch-Scripts
-Some useful Batch scripts for Kerbal Space Program (WIP)
+Some useful Batch scripts for Kerbal Space Program
 
 ## Progress
 `KspDataCli` can load, display, modify and save data files<br>

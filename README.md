@@ -16,7 +16,7 @@ Extract all scripts to a folder and run `KspProfiles.cmd` as admin.
 ## Usage
 When you want to play without mods, just do `KspProfiles activate Vanilla`.
 
-Current cammands in `KspDataCli`:
+Available commands in `KspDataCli`:
 
 - select [..|number]
 - list
@@ -26,3 +26,11 @@ Current cammands in `KspDataCli`:
 - eval &lt;text&gt;
 - help [command]
 - exit
+
+Available sub-commands in `KspProfiles`:
+
+- activate &lt;profile&gt;
+- create &lt;profile&gt;
+- addMod &lt;profile&gt; &lt;mod&gt;
+- addModuleManager &lt;profile&gt;
+- help

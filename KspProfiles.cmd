@@ -26,12 +26,12 @@ path %path%;%kspProfiles%
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I" "%kspProfiles%" 2>>"%kspProfilesLogs%"
 call :create Vanilla
-for /f %%I in ('dir/b "%kspProfiles%\GameData" ^2>>"%kspProfilesLogs%"') do if not %%I==Squad call :create Modded
+for /f %%I in ('dir/b "%kspProfiles%\GameData" 2^>^>"%kspProfilesLogs%"') do if not %%I==Squad call :create Modded
 if exist "%kspProfiles%\Profiles\Modded" (( for /f %%I in ('dir/b/a:d "%kspProfiles%\GameData" ^2>>"%kspProfilesLogs%"') do call :addMod Modded %%I) & call :addModuleManager Modded )
 exit/b
 :setupEnv
 pushd %1
-for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>>"%kspProfilesLogs%"') do set "kspInstall=%%~fI"
+for /f "delims=" %%I in ('dir/b/s/a:d "Kerbal Space Program" 2^>^>"%kspProfilesLogs%"') do set "kspInstall=%%~fI"
 popd
 exit/b
 :create
@@ -45,7 +45,7 @@ mklink/d "%kspProfiles%\Profiles\%1\GameData\%2" "%kspProfiles%\GameData\%2" 2>>
 exit/b
 :addModuleManager
 if not exist "%kspProfiles%\GameData\ModuleManager.*.dll" exit/b
-for /f %%I in ('dir/b/a:-d "%kspProfiles%\GameData\ModuleManager.*.dll" ^2>>"%kspProfilesLogs%"') do set MMVersion=%%I
+for /f %%I in ('dir/b/a:-d "%kspProfiles%\GameData\ModuleManager.*.dll" 2^>^>"%kspProfilesLogs%"') do set MMVersion=%%I
 mklink/h "%kspProfiles%\Profiles\%1\GameData\%MMVersion%" "%kspProfiles%\GameData\%MMVersion%" 2>>"%kspProfilesLogs%"
 exit/b
 :activate

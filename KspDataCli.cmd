@@ -1,6 +1,7 @@
 0</* ::
 @echo off
 rem Polyglot from https://gist.github.com/yaauie/959862
+if "%~1"=="-version" type %~dp0VERSION &exit/b
 title Kerbal Data Command Line Interface
 echo For a list of commands, type 'help'
 where jjs >nul 2>&1 && jjs -scripting "%~f0" -- %* || echo Please install the Java Runtime Environment

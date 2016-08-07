@@ -1,4 +1,5 @@
 @echo off
+if "%~1"=="-version" type %~dp0VERSION &exit/b
 set tst=C:\deleteMe.tmp
 (type nul>%tst%) 2>nul && (del %tst% & set isElevated=t) || (set isElevated=)
 if not defined isElevated (echo Please run this from an elevated command prompt. &exit/b)

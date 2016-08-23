@@ -2,7 +2,7 @@
 Some useful Batch scripts for [Kerbal Space Program](https://kerbalspaceprogram.com)
 
 ## Progress
-`KspDataCli` can load, display, modify and save data files<br>
+`KspDataCli` can load, display, modify and save data files; can also copy and paste entries<br>
 `KspProfiles` sets up the necessary folders and variables on first run
 
 ## Setting up

@@ -127,25 +127,17 @@ function reload(msgs){
 	cnp=new Array();
 	if(msgs)print("Reload complete.");
 }
-function copy(args){
-	var type=args[0],i=args[1],type0;
+function clipboard(operation,args){
+	var type=args[0],i=args[1],j=args[2],type0,evalCmd;
 	if(type.indexOf('f')>-1)type0='field';
 	else if(type.indexOf('n')>-1)type0='node';
 	else {
 		print("Unable to parse '${type}'. Please try again");
 		return;
 	}
-	eval("clipboardData.${type0}s.push(node.${type0}s[i])");
-}
-function paste(args){
-	var type=args[0],i=args[1],j=args[2],type0;
-	if(type.indexOf('f')>-1)type0='field';
-	else if(type.indexOf('n')>-1)type0='node';
-	else {
-		print("Unable to parse '${type}'. Please try again");
-		return;
-	}
-	eval("node.${type0}s[j]=clipboardData.${type0}s[i]");
+	if(operation=='copy')evalCmd="clipboardData.${type0}s.push(node.${type0}s[i])";
+	else evalCmd="node.${type0}s[j]=clipboardData.${type0}s[i]";
+	eval(evalCmd);
 }
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");

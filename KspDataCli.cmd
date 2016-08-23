@@ -175,7 +175,9 @@ while(cmd!=="exit"){
 			node=select(obj,args);
 			break;
 		case 3: //list
-			if(args[0].indexOf('clip')>-1) {
+			var s='';
+			if(args[0]!==undefined||typeof args[0]!=='undefined')s=args[0];
+			if(s.indexOf('clip')>-1) {
 				print('Clipboard data:');
 				list(clipboardData,args.splice(0,1));
 			}

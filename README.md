@@ -18,11 +18,13 @@ When you want to play without mods, just do `KspProfiles activate Vanilla`.
 
 Available commands in `KspDataCli`:
 
-- select [..|number]
-- list
-- set &lt;number&gt; &lt;text&gt;
-- save
+- select [..|index]
+- list [clip[board]]
+- set &lt;index&gt; &lt;text&gt;
+- save [clip[board]]
 - reload
+- copy &lt;index&gt;
+- paste &lt;index_from&gt; &lt;index_to&gt;
 - eval &lt;text&gt;
 - help [command]
 - exit

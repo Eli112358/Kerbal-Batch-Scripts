@@ -127,16 +127,37 @@ function reload(msgs){
 	cnp=new Array();
 	if(msgs)print("Reload complete.");
 }
+function copy(args){
+	var type=args[0],i=args[1],type0;
+	if(type.indexOf('f')>-1)type0='field';
+	else if(type.indexOf('n')>-1)type0='node';
+	else {
+		print("Unable to parse '${type}'. Please try again");
+		return;
+	}
+	eval("clipboardData.${type0}s.push(node.${type0}s[i])");
+}
+function paste(args){
+	var type=args[0],i=args[1],j=args[2],type0;
+	if(type.indexOf('f')>-1)type0='field';
+	else if(type.indexOf('n')>-1)type0='node';
+	else {
+		print("Unable to parse '${type}'. Please try again");
+		return;
+	}
+	eval("node.${type0}s[j]=clipboardData.${type0}s[i]");
+}
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
-var obj;
+var obj,cnp /* current node path */,clipboardData=new Object();
+clipboardData.fields=new Array();
+clipboardData.nodes=new Array();
 print("Loading data...");
 reload(false);
 print("For a list of commands, type 'help'");
 var node=obj;
 var cmds=['exit','help','select','list','set','save','reload','eval'];
-var cnp; //current node path
 while(cmd!=="exit"){
 	var rawInput=readLine("${cnp.join('.')}>");
 	var cmd='',args='';

@@ -92,12 +92,15 @@ function setFieldValue(node,args){
 }
 function saveFile(args){
 	var now=new Date().toISOString();
-	var s=$ARG[0],i=s.lastIndexOf('.');
-	var backupFileName=s.substring(0,i)+'-backup'+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
-	$EXEC("cmd /c \"ren ${$ARG[0]} ${backupFileName}\"");
+	var s=$ARG[0],i=s.lastIndexOf('.'),type='backup';
+	if(args[0].indexOf('clip')>-1)type='clipboard';
+	var backupFileName=s.substring(0,i)+'-'+type+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
+	if(type=='backup')$EXEC("cmd /c \"ren ${$ARG[0]} ${backupFileName}\"");
 	print("Saving...");
-	var bw=new BufferedWriter(new FileWriter($ARG[0]));
+	if(type=='clipboard')s=backupFileName;
+	var bw=new BufferedWriter(new FileWriter(s));
 	var sNode=obj,numTabs=0;
+	if(type=='clipboard')sNode=clipboardData;
 	saveNode(sNode);
 	bw.close();
 	print("Done!");
@@ -149,7 +152,7 @@ print("Loading data...");
 reload(false);
 print("For a list of commands, type 'help'");
 var node=obj;
-var cmds=['exit','help','select','list','set','save','reload','eval'];
+var cmds=['exit','help','select','list','set','save','reload','copy','paste','eval'];
 while(cmd!=="exit"){
 	var rawInput=readLine("${cnp.join('.')}>");
 	var cmd='',args='';
@@ -172,7 +175,11 @@ while(cmd!=="exit"){
 			node=select(obj,args);
 			break;
 		case 3: //list
-			list(node,args);
+			if(args[0].indexOf('clip')>-1) {
+				print('Clipboard data:');
+				list(clipboardData,args.splice(0,1));
+			}
+			else list(node,args);
 			break;
 		case 4: //set
 			setFieldValue(node,args);
@@ -183,7 +190,13 @@ while(cmd!=="exit"){
 		case 6: //reload
 			reload();
 			break;
-		case 7: //eval
+		case 7: //copy
+			clipboard('copy',args);
+			break;
+		case 8: //paste
+			clipboard('paste',args);
+			break;
+		case 9: //eval
 			eval(args.join(' '));
 			break;
 		default: //unknown

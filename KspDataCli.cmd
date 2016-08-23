@@ -3,7 +3,6 @@
 rem Polyglot from https://gist.github.com/yaauie/959862
 if "%~1"=="-version" type %~dp0VERSION &exit/b
 title Kerbal Data Command Line Interface
-echo For a list of commands, type 'help'
 where jjs >nul 2>&1 && jjs -scripting "%~f0" -- %* || echo Please install the Java Runtime Environment
 exit/b
 */0;
@@ -121,17 +120,20 @@ function saveFile(args){
 		printToFile("${getIndent()}}");
 	}
 }
-function reload(){
-	print("Reloading data from file...");
+function reload(msgs){
+	if(msgs==undefined||typeof msgs=='undefined') msgs=true
+	if(msgs)print("Reloading data from file...");
 	obj=loadDataFile($ARG[0]);
 	cnp=new Array();
-	print("Reload complete.");
+	if(msgs)print("Reload complete.");
 }
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
 var obj;
-reload();
+print("Loading data...");
+reload(false);
+print("For a list of commands, type 'help'");
 var node=obj;
 var cmds=['exit','help','select','list','set','save','reload','eval'];
 var cnp; //current node path

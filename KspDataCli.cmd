@@ -10,10 +10,14 @@ var BufferedWriter=Java.type('java.io.BufferedWriter');
 var FileWriter=Java.type('java.io.FileWriter');
 var alphaNum='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
 var fieldDelim=' = ';
+function initDataObject(){
+	var dataObject=new Object();
+	dataObject.fields=new Array();
+	dataObject.nodes=new Array();
+	return dataObject;
+}
 function loadDataFile(file){
-	var node=new Object();
-	node.fields=new Array();
-	node.nodes=new Array();
+	var node=initDataObject();
 	var line='',nodeStack=new Array();
 	var lines=readFully(file).replace(/\t+/g,'').replace(/\r\n{/g,'').split('\r\n');
 	for(var l in lines){
@@ -145,9 +149,7 @@ function clipboard(operation,args){
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
-var obj,cnp /* current node path */,clipboardData=new Object();
-clipboardData.fields=new Array();
-clipboardData.nodes=new Array();
+var obj,cnp /* current node path */,clipboardData=initDataObject();
 print("Loading data...");
 reload(false);
 print("For a list of commands, type 'help'");

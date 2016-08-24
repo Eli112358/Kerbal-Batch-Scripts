@@ -6,7 +6,7 @@ Some useful Batch scripts for [Kerbal Space Program](https://kerbalspaceprogram.
 `KspProfiles` sets up the necessary folders and variables on first run
 
 ## Setting up
-Extract all scripts to a folder and run `KspProfiles.cmd` as admin.
+Extract all scripts and VERSION file to a folder and run `KspProfiles.cmd` as admin.
 
 ## Requirements
 `KspDataCli` requires java runtime environment<br>
@@ -22,7 +22,7 @@ Available commands in `KspDataCli`:
 - list [clip[board]]
 - set &lt;index&gt; &lt;text&gt;
 - save [clip[board]]
-- reload
+- reload [file]
 - copy &lt;index&gt;
 - paste &lt;index_from&gt; &lt;index_to&gt;
 - eval &lt;text&gt;

@@ -60,9 +60,9 @@ function select(rootObj,args){
 	}
 	return n;
 }
-function list(obj,args){
-	listFields(obj);
-	listNodes(obj);
+function list(node,args){
+	listFields(node);
+	listNodes(node);
 }
 function listFields(node){
 	print(" Fields:${node.fields.length}");
@@ -96,10 +96,10 @@ function setFieldValue(node,args){
 }
 function saveFile(args){
 	var now=new Date().toISOString();
-	var s=$ARG[0],i=s.lastIndexOf('.'),type='backup';
+	var s=dataFile,i=s.lastIndexOf('.'),type='backup';
 	if(args[0].indexOf('clip')>-1)type='clipboard';
 	var backupFileName=s.substring(0,i)+'-'+type+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
-	if(type=='backup')$EXEC("cmd /c \"ren ${$ARG[0]} ${backupFileName}\"");
+	if(type=='backup')$EXEC("cmd /c \"ren ${dataFile} ${backupFileName}\"");
 	print("Saving...");
 	if(type=='clipboard')s=backupFileName;
 	var bw=new BufferedWriter(new FileWriter(s));
@@ -130,7 +130,7 @@ function saveFile(args){
 function reload(msgs){
 	if(msgs==undefined||typeof msgs=='undefined') msgs=true
 	if(msgs)print("Reloading data from file...");
-	obj=loadDataFile($ARG[0]);
+	obj=loadDataFile(dataFile);
 	cnp=new Array();
 	if(msgs)print("Reload complete.");
 }
@@ -149,7 +149,7 @@ function clipboard(operation,args){
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
 }
-var obj,cnp /* current node path */,clipboardData=initDataObject();
+var obj,cnp /* current node path */,clipboardData=initDataObject(),dataFile=$ARG[0];
 print("Loading data...");
 reload(false);
 print("For a list of commands, type 'help'");
@@ -179,7 +179,7 @@ while(cmd!=="exit"){
 		case 3: //list
 			var s='';
 			if(args[0]!==undefined||typeof args[0]!=='undefined')s=args[0];
-			if(s.indexOf('clip')>-1) {
+			if(s.indexOf('clip')>-1){
 				print('Clipboard data:');
 				list(clipboardData,args.splice(0,1));
 			}
@@ -192,7 +192,13 @@ while(cmd!=="exit"){
 			saveFile(args);
 			break;
 		case 6: //reload
-			reload();
+			var s='';
+			if(args[0]!==undefined||typeof args[0]!=='undefined')s=args[0];
+			if(s.indexOf('clip')>-1)clipboardData=loadDataFile(s);
+			else {
+				dataFile=s;
+				reload();
+			}
 			break;
 		case 7: //copy
 			clipboard('copy',args);

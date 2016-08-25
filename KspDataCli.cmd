@@ -97,7 +97,7 @@ function setFieldValue(node,args){
 function saveFile(args){
 	var now=new Date().toISOString();
 	var s=dataFile,i=s.lastIndexOf('.'),type='backup';
-	if(args[0].indexOf('clip')>-1)type='clipboard';
+	if(args.length>0)if(args[0].indexOf('clip')>-1)type='clipboard';
 	var backupFileName=s.substring(0,i)+'-'+type+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
 	if(type=='backup')$EXEC("cmd /c \"ren ${dataFile} ${backupFileName}\"");
 	print("Saving...");

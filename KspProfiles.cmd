@@ -38,11 +38,11 @@ exit/b
 :create
 md "%kspProfiles%\Profiles\%1" 2>>"%kspProfilesLogs%"
 for %%J in (GameData saves) do md "%kspProfiles%\Profiles\%1\%%J" 2>>"%kspProfilesLogs%"
-mklink/d "%kspProfiles%\Profiles\%%I\GameData\Squad" "%kspProfiles%\GameData\Squad" 2>>"%kspProfilesLogs%"
-for %%J in (senarios training) do mklink/d "%kspProfiles%\Profiles\%1\saves\%%J" "%kspProfiles%\saves\%%J" 2>>"%kspProfilesLogs%"
+call :symlink "%kspProfiles%\Profiles\%%I\GameData\Squad" "%kspProfiles%\GameData\Squad"
+for %%J in (senarios training) do call :symlink "%kspProfiles%\Profiles\%1\saves\%%J" "%kspProfiles%\saves\%%J"
 exit/b
 :addMod
-mklink/d "%kspProfiles%\Profiles\%1\GameData\%2" "%kspProfiles%\GameData\%2" 2>>"%kspProfilesLogs%"
+call :symlink "%kspProfiles%\Profiles\%1\GameData\%2" "%kspProfiles%\GameData\%2"
 exit/b
 :addModuleManager
 if not exist "%kspProfiles%\GameData\ModuleManager.*.dll" exit/b
@@ -51,8 +51,15 @@ mklink/h "%kspProfiles%\Profiles\%1\GameData\%MMVersion%" "%kspProfiles%\GameDat
 exit/b
 :activate
 pushd "%kspInstall%"
-for %%I in (GameData saves) do rd %%I 2>>"%kspProfilesLogs%" &mklink/d %%I "%kspProfiles%\%*\%%I" 2>>"%kspProfilesLogs%"
+for %%I in (GameData saves) do rd %%I 2>>"%kspProfilesLogs%" & call :symlink %%I "%kspProfiles%\%*\%%I"
 popd
+exit/b
+:symlink
+for /f %%I in (%1) do set "driveLink=%%~dI"
+for /f %%I in (%2) do set "driveTarget=%%~dI"
+set type=d
+if not "%driveLink%"=="%driveTarget%" set type=j
+mklink /%type% %1 %2 &2>>"%kspProfilesLogs%"
 exit/b
 :help
 echo Usage:

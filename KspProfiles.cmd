@@ -18,9 +18,9 @@ exit/b
 set "kspProfiles=%~0dp"
 setx kspProfiles "%kspProfiles%"
 if defined kspInstall goto setupFolders
-set "search=C:\Program Files"
-reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" >nul && echo.>nul || set "search=%search%;C:\Program Files (x86)"
-for "delims=;" %%I in (%search%) do pushd "%%I" & call :setupEnv "%%I" & popd
+set "search=%ProgramFiles%"
+if defined ProgramFiles(x86) set "search=%ProgramFiles(x86)%"
+where jjs >nul 2>&1 && (for /f "delims=" %%I in ('jjs -scripting var lines=readFully("%search%\Steam\steamapps\libraryFolders.vdf").split("\r\n");for(var x in lines){var i=lines[x].indexOf(":");if(i>-1)print(lines[x].substring(i-2))}') do call :setupEnv %%I ) || echo Please install the Java Runtime Environment
 set search=
 setx kspInstall "%kspInstall%"
 path %path%;%kspProfiles%
@@ -61,3 +61,4 @@ echo.  %~n0 create ^<profile^>               create new profile
 echo.  %~n0 addMod ^<profile^> ^<mod^>         add a mod to a profile
 echo.  %~n0 addModuleManager ^<profile^>     add the ModuleManager mod to a profile
 echo.  %~n0 help                           display this help message
+

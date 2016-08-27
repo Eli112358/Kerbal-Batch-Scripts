@@ -9,7 +9,7 @@ Some useful Batch scripts for [Kerbal Space Program](https://kerbalspaceprogram.
 Extract all scripts and VERSION file to a folder and run `KspProfiles.cmd` as admin.
 
 ## Requirements
-`KspDataCli` requires java runtime environment<br>
+Both require java runtime environment<br>
 `KspProfiles` must be called from an elevated command prompt<br>
 **Each will check for their requirements and report if they're not found
 

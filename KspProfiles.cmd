@@ -17,13 +17,22 @@ exit/b
 :setup
 set "kspProfiles=%~0dp"
 setx kspProfiles "%kspProfiles%"
+path %path%;%kspProfiles%
 if defined kspInstall goto setupFolders
 set "search=%ProgramFiles%"
 if defined ProgramFiles(x86) set "search=%ProgramFiles(x86)%"
-where jjs >nul 2>&1 && (for /f "delims=" %%I in ('jjs -scripting var lines=readFully("%search%\Steam\steamapps\libraryFolders.vdf").split("\r\n");for(var x in lines){var i=lines[x].indexOf(":");if(i>-1)print(lines[x].substring(i-2))}') do call :setupEnv %%I ) || echo Please install the Java Runtime Environment
+set "steamLibraryFolders=%search%\Steam\steamapps\libraryFolders.vdf"
+if not exist "%steamLibraryFolders%" goto setupNoSteam
+where jjs >nul 2>&1 && (for /f "delims=" %%I in ('jjs -scripting var lines=readFully("%steamLibraryFolders%").split("\r\n");for(var x in lines){var i=lines[x].indexOf(":");if(i>-1)print(lines[x].substring(i-2))}') do call :setupEnv %%I ) || echo Please install the Java Runtime Environment
+if defined kspInstall goto setupKspInstallFound
+:setupNoSteam
+for /f %%I in ('dir/b/s/a:d %search%') do call :setupEnv %%I
+if defined kspInstall goto setupKspInstallFound
+echo Couldn't find installation of KSP. Please install Kerbal Space Program first.
+exit/b
+:setupKspInstallFound
 set search=
 setx kspInstall "%kspInstall%"
-path %path%;%kspProfiles%
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I" "%kspProfiles%" 2>>"%kspProfilesLogs%"
 call :create Vanilla

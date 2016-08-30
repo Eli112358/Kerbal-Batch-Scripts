@@ -1,5 +1,10 @@
 @echo off
-if "%~1"=="-version" type %~dp0VERSION &exit/b
+if "%~1"=="-github" start https://github.com/Eli112358/Kerbal-Batch-Scripts/releases/latest &exit/b
+if not "%~1"=="-version" goto start
+for /f %%I in ('type %~dp0VERSION') do set version=%%I
+echo Kerbal Batch Scripts v%version% by Eli112358 on Github
+exit/b
+:start
 set tst=C:\deleteMe.tmp
 (type nul>%tst%) 2>nul && (del %tst% & set isElevated=t) || (set isElevated=)
 if not defined isElevated (echo Please run this from an elevated command prompt. &exit/b)

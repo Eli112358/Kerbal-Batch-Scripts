@@ -9,6 +9,7 @@ exit/b
 */0;
 var BufferedWriter=Java.type('java.io.BufferedWriter');
 var FileWriter=Java.type('java.io.FileWriter');
+var System=Java.type('java.lang.System');
 var alphaNum='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
 var fieldDelim=' = ';
 function initDataObject(){
@@ -20,6 +21,7 @@ function initDataObject(){
 function loadDataFile(file){
 	var node=initDataObject();
 	var line='',nodeStack=new Array();
+	System.gc();
 	var lines=readFully(file).replace(/\t+/g,'').replace(/\r\n{/g,'').split('\r\n');
 	for(var l in lines){
 		line=lines[l];
@@ -131,6 +133,7 @@ function saveFile(args){
 function reload(msgs){
 	if(msgs==undefined||typeof msgs=='undefined') msgs=true
 	if(msgs)print("Reloading data from file...");
+	obj=undefined;
 	obj=loadDataFile(dataFile);
 	cnp=new Array();
 	if(msgs)print("Reload complete.");
@@ -193,13 +196,8 @@ while(cmd!=="exit"){
 			saveFile(args);
 			break;
 		case 6: //reload
-			var s='';
-			if(args[0]!==undefined||typeof args[0]!=='undefined')s=args[0];
-			if(s.indexOf('clip')>-1)clipboardData=loadDataFile(s);
-			else {
-				dataFile=s;
-				reload();
-			}
+			if((args[0]!==undefined||typeof args[0]!=='undefined')&&(args[0].indexOf('clip')>-1))clipboardData=loadDataFile(args[0]);
+			else reload();
 			break;
 		case 7: //copy
 			clipboard('copy',args);

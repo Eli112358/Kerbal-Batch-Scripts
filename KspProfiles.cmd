@@ -44,8 +44,16 @@ setx kspInstall "%kspInstall%"
 :setupFolders
 for %%I in (GameData saves) do move "%kspInstall%\%%I" "%kspProfiles%" 2>>"%kspProfilesLogs%"
 call :create Vanilla
-for /f %%I in ('dir/b "%kspProfiles%\GameData" 2^>^>"%kspProfilesLogs%"') do if not %%I==Squad call :create Modded
-if exist "%kspProfiles%\Profiles\Modded" (( for /f %%I in ('dir/b/a:d "%kspProfiles%\GameData" ^2>>"%kspProfilesLogs%"') do call :addMod Modded %%I) & call :addModuleManager Modded )
+for /f %%I in ('dir/b "%kspProfiles%\GameData" 2^>^>"%kspProfilesLogs%"') do if not %%I==Squad set modded=yes
+if defined modded call :create Modded
+if defined modded for /f %%I in ('dir/b/a:d "%kspProfiles%\GameData" ^2>>"%kspProfilesLogs%"') do call :addMod Modded %%I
+if defined modded call :addModuleManager Modded
+set defaultProfile=Vanilla
+if defined modded set defaultProfile=Modded
+call :activate %defaultProfile%
+for %%I in (GameData saves) do call :symlink "%kspInstall%\%%I" "%kspProfiles%\.Active\%%I" 2>>"%kspProfilesLogs%"
+set defaultProfile=
+set modded=
 exit/b
 :setupEnv
 pushd %1
@@ -67,16 +75,17 @@ for /f %%I in ('dir/b/a:-d "%kspProfiles%\GameData\ModuleManager.*.dll" 2^>^>"%k
 mklink/h "%kspProfiles%\Profiles\%1\GameData\%MMVersion%" "%kspProfiles%\GameData\%MMVersion%" 2>>"%kspProfilesLogs%"
 exit/b
 :activate
-pushd "%kspInstall%"
-for %%I in (GameData saves) do rd %%I 2>>"%kspProfilesLogs%" & call :symlink %%I "%kspProfiles%\%*\%%I"
+pushd "%kspProfiles%\Profiles"
+attrib -h .Active /l 2>>"%kspProfilesLogs%"
+rd .Active 2>>"%kspProfilesLogs%"
+mklink/d .Active %1 2>>"%kspProfilesLogs%"
+attrib +h .Active /l 2>>"%kspProfilesLogs%"
 popd
 exit/b
 :symlink
-for /f %%I in (%1) do set "driveLink=%%~dI"
-for /f %%I in (%2) do set "driveTarget=%%~dI"
 set type=d
-if not "%driveLink%"=="%driveTarget%" set type=j
-mklink /%type% %1 %2 &2>>"%kspProfilesLogs%"
+if not "%~d1"=="%~d2" set type=j
+mklink /%type% "%~1" "%~2" &2>>"%kspProfilesLogs%"
 exit/b
 :help
 echo Usage:
@@ -85,4 +94,3 @@ echo.  %~n0 create ^<profile^>               create new profile
 echo.  %~n0 addMod ^<profile^> ^<mod^>         add a mod to a profile
 echo.  %~n0 addModuleManager ^<profile^>     add the ModuleManager mod to a profile
 echo.  %~n0 help                           display this help message
-

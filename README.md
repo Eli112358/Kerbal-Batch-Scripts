@@ -23,8 +23,11 @@ Available commands in `KspDataCli`:
 - set &lt;index&gt; &lt;text&gt;
 - save [clip[board]]
 - reload [file]
-- copy &lt;index&gt;
-- paste &lt;index_from&gt; &lt;index_to&gt;
+  - (if file name contains 'clip', will load as clipboard data, replacing any previously copied data)
+- copy &lt;f|field|n|node&gt; &lt;index&gt; [&lt;count [c]&gt;|&lt;&lt;ending_index&gt; &lt;i|e&gt;&gt;]
+  - ( **I** nclude or **E** xclude ending index)
+- paste &lt;f|field|n|node&gt; &lt;index_to_paste_to&gt; &lt;index_to_paste_from&gt; [&lt;count [c]&gt;|&lt;&lt;ending_index&gt; &lt;i|e&gt;&gt;]
+  - ( **I** nclude or **E** xclude ending index)
 - eval &lt;text&gt;
 - help [command]
 - exit
@@ -34,5 +37,6 @@ Available sub-commands in `KspProfiles`:
 - activate &lt;profile&gt;
 - create &lt;profile&gt;
 - addMod &lt;profile&gt; &lt;mod&gt;
-- addModuleManager &lt;profile&gt;
+- addModMgr &lt;profile&gt;
+- ~~addModuleManager &lt;profile&gt;~~ (Deprecated)
 - help

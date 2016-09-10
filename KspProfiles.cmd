@@ -70,6 +70,8 @@ exit/b
 call :symlink "%kspProfiles%\Profiles\%1\GameData\%2" "%kspProfiles%\GameData\%2"
 exit/b
 :addModuleManager
+echo 'addModuleManager' is deprecated. Please use 'addModMgr' instead.
+:addModMgr
 if not exist "%kspProfiles%\GameData\ModuleManager.*.dll" exit/b
 for /f %%I in ('dir/b/a:-d "%kspProfiles%\GameData\ModuleManager.*.dll" 2^>^>"%kspProfilesLogs%"') do set MMVersion=%%I
 mklink/h "%kspProfiles%\Profiles\%1\GameData\%MMVersion%" "%kspProfiles%\GameData\%MMVersion%" 2>>"%kspProfilesLogs%"
@@ -89,8 +91,9 @@ mklink /%type% "%~1" "%~2" &2>>"%kspProfilesLogs%"
 exit/b
 :help
 echo Usage:
-echo.  %~n0 activate ^<profile^>             make KSP use this profile
-echo.  %~n0 create ^<profile^>               create new profile
-echo.  %~n0 addMod ^<profile^> ^<mod^>         add a mod to a profile
-echo.  %~n0 addModuleManager ^<profile^>     add the ModuleManager mod to a profile
-echo.  %~n0 help                           display this help message
+echo.  %~n0 activate ^<profile^>             Make KSP use this profile
+echo.  %~n0 create ^<profile^>               Create new profile
+echo.  %~n0 addMod ^<profile^> ^<mod^>         Add a mod to a profile
+echo.  %~n0 addModMgr ^<profile^>            Add the ModuleManager mod to a profile
+echo.  %~n0 addModuleManager ^<profile^>     (Deprecated, see 'addModMgr')
+echo.  %~n0 help                           Display this help message

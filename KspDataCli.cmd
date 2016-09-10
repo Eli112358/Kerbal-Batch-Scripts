@@ -139,16 +139,33 @@ function reload(msgs){
 	if(msgs)print("Reload complete.");
 }
 function clipboard(operation,args){
-	var type=args[0],i=args[1],j=args[2],type0,evalCmd;
-	if(type.indexOf('f')>-1)type0='field';
-	else if(type.indexOf('n')>-1)type0='node';
-	else {
-		print("Unable to parse '${type}'. Please try again");
+	function copy(start,count){eval("for(var x=${start};x<${start+count};x++)clipboardData.${trueType}s.push(node.${trueType}s[x])");}
+	function paste(start,count){eval("for(var x=${start};x<${start+count};x++)node.${trueType}s[${to}]=clipboardData.${trueType}s[x]");}
+	function listOptions(options){return "should be one of: '${options.split(';').join(', ')}'."}
+	var availOps='copy;paste',errorType='',availTypes='f;field;n;node',trueType='node',endTypeOptions='c;e;i',c=1;
+	if(availOps.indexOf(operation)==-1){
+		print("Error: Unkown operation '${operation}' given, ${listOptions(availOps)}");
 		return;
 	}
-	if(operation=='copy')evalCmd="clipboardData.${type0}s.push(node.${type0}s[i])";
-	else evalCmd="node.${type0}s[j]=clipboardData.${type0}s[i]";
-	eval(evalCmd);
+	if(args.length<2)errorType='few';
+	if(args.length>operation.length)errorType='many';
+	if(errorType.length>0){
+		print("Error: Too ${errorType} arguments, should be 2-${operation.length} for '${operation}'.");
+		return;
+	}
+	if(type.indexOf('f')==type.indexOf('n')){
+		print("Error: Unable to parse '${type}', ${listOptions(availTypes)}");
+		return;
+	}
+	var type=args[0],to=args[1];
+	var la=args.length,lo=operation.length,dOp=lo-4,i=args[1+dOp],j=la<3+dOp?1:args[2+dOp],k=la==lo?'c':args[3+dOp];
+	if(endTypeOptions.indexOf(k)==-1){
+		print("Error: Unkown argument '${k}' given, ${listOptions(endTypeOptions)}");
+		return;
+	}
+	if(type.indexOf('f')>-1)trueType='field';
+	c=j-(k=='c'?0:i)+(k=='i'?1:0);
+	eval("${operation}(i,c)");
 }
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");

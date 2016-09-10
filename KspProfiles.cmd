@@ -7,7 +7,12 @@ exit/b
 :start
 set tst=C:\deleteMe.tmp
 (type nul>%tst%) 2>nul && (del %tst% & set isElevated=t) || (set isElevated=)
-if not defined isElevated (echo Please run this from an elevated command prompt. &exit/b)
+if defined isElevated goto isElevated
+echo Please run this from an elevated command prompt.
+if "%~1"=="" goto help
+if "%~1"=="help" goto help
+exit/b
+:isElevated
 set tst=
 set "kspProfilesLogs=%cd%\kspProfiles.log"
 (type nul>"%kspProfilesLogs%") 2>nul

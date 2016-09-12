@@ -14,8 +14,6 @@ if "%~1"=="help" goto help
 exit/b
 :isElevated
 set tst=
-set "kspProfilesLogs=%cd%\kspProfiles.log"
-(type nul>"%kspProfilesLogs%") 2>nul
 if not defined kspInstall call :setup
 if not defined kspProfiles call :setup
 if "%~1"=="" goto help
@@ -27,6 +25,9 @@ exit/b
 :setup
 set "kspProfiles=%~0dp"
 setx kspProfiles "%kspProfiles%"
+set "kspProfilesLogs=%kspProfiles%\kspProfiles.log"
+setx kspProfilesLogs %kspProfilesLogs%
+(type nul>"%kspProfilesLogs%") 2>nul
 path %path%;%kspProfiles%
 if defined kspInstall goto setupFolders
 set "search=%ProgramFiles%"
@@ -92,7 +93,7 @@ exit/b
 :symlink
 set type=d
 if not "%~d1"=="%~d2" set type=j
-mklink /%type% "%~1" "%~2" &2>>"%kspProfilesLogs%"
+mklink /%type% "%~1" "%~2" 2>>"%kspProfilesLogs%"
 exit/b
 :help
 echo Usage:

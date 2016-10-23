@@ -104,34 +104,32 @@ function saveFile(args){
 	var backupFileName=s.substring(0,i)+'-'+type+now.substring(0,10).replace(/-/g,'')+now.substring(11,19).replace(/:/g,'')+s.substring(i);
 	if(type=='backup')$EXEC("cmd /c \"ren ${dataFile} ${backupFileName}\"");
 	print("Saving...");
-	if(type=='clipboard')s=backupFileName;
-	var bw=new BufferedWriter(new FileWriter(s));
+	var bw=new BufferedWriter(new FileWriter(type=='clipboard'?backupFileName:s));
 	var sNode=obj,numTabs=0;
 	if(type=='clipboard')sNode=clipboardData;
 	saveNode(sNode);
 	bw.close();
 	print("Done!");
-	function getIndent(){return Array(numTabs+1).join('\t')}
-	function printToFile(s){
-		bw.write(s+'\r\n');
+	function printToFile(text){
+		bw.write(new Array(numTabs+1).join('\t')+text+'\r\n');
 		bw.flush();
 	}
 	function saveNode(n){
-		if(typeof n.label=='undefined'||n.label=='undefined'){
+		if(!isDefined(n.label)||n.label=='undefined'){
 			saveNode(n.nodes[0]);
 			return;
 		}
-		printToFile("${getIndent()}${n.label}");
-		printToFile("${getIndent()}{");
+		printToFile(n.label);
+		printToFile('{');
 		numTabs++;
-		for(var x in n.fields){printToFile("${getIndent()}${n.fields[x]}")}
+		for(var x in n.fields){printToFile(n.fields[x])}
 		for(var x in n.nodes){saveNode(n.nodes[x])}
 		numTabs--;
-		printToFile("${getIndent()}}");
+		printToFile('}');
 	}
 }
 function reload(msgs){
-	if(msgs==undefined||typeof msgs=='undefined') msgs=true
+	if(!isDefined(msgs)) msgs=true
 	if(msgs)print("Reloading data from file...");
 	obj=undefined;
 	obj=loadDataFile(dataFile);
@@ -139,8 +137,9 @@ function reload(msgs){
 	if(msgs)print("Reload complete.");
 }
 function clipboard(operation,args){
-	function copy(start,count){eval("for(var x=${start};x<${start+count};x++)clipboardData.${trueType}s.push(node.${trueType}s[x])");}
-	function paste(start,count){eval("for(var x=${start};x<${start+count};x++)node.${trueType}s[${to}]=clipboardData.${trueType}s[x]");}
+	function loopCode(start,count,code){eval("for(var x=${start};x<${start+count};x++)${code}")}
+	function copy(start,count){loopCode("clipboardData.${trueType}s.push(node.${trueType}s[x])");}
+	function paste(start,count){loopCode("node.${trueType}s[${to}]=clipboardData.${trueType}s[x]");}
 	function listOptions(options){return "should be one of: '${options.split(';').join(', ')}'."}
 	var availOps='copy;paste',errorType='',availTypes='f;field;n;node',trueType='node',endTypeOptions='c;e;i',c=1;
 	if(availOps.indexOf(operation)==-1){
@@ -166,6 +165,9 @@ function clipboard(operation,args){
 	if(type.indexOf('f')>-1)trueType='field';
 	c=j-(k=='c'?0:i)+(k=='i'?1:0);
 	eval("${operation}(i,c)");
+}
+function isDefined(obj){
+	return obj!==undefined||typeof obj!=='undefined';
 }
 function unknownCmd(cmd){
 	print("Unkown command:${cmd};");
@@ -199,7 +201,7 @@ while(cmd!=="exit"){
 			break;
 		case 3: //list
 			var s='';
-			if(args[0]!==undefined||typeof args[0]!=='undefined')s=args[0];
+			if(isDefined(args[0]))s=args[0];
 			if(s.indexOf('clip')>-1){
 				print('Clipboard data:');
 				list(clipboardData,args.splice(0,1));
@@ -213,7 +215,7 @@ while(cmd!=="exit"){
 			saveFile(args);
 			break;
 		case 6: //reload
-			if((args[0]!==undefined||typeof args[0]!=='undefined')&&(args[0].indexOf('clip')>-1))clipboardData=loadDataFile(args[0]);
+			if(isDefined(args[0])&&(args[0].indexOf('clip')>-1))clipboardData=loadDataFile(args[0]);
 			else reload();
 			break;
 		case 7: //copy

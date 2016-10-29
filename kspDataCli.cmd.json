@@ -24,7 +24,7 @@
 		"item" : "paste &lt;type&gt; &lt;paste_to&gt; &lt;index_from&gt; [count [c]]",
 		"description" : "or"
 	}, {
-		"item" : "paste &lt;type&gt; &lt;paste_to&gt; &lt;index_from&gt; &lt;to_index&gt; &lt;i|e&gt;"
+		"item" : "paste &lt;type&gt; &lt;paste_to&gt; &lt;index_from&gt; &lt;to_index&gt; &lt;i|e&gt;",
 		"description" : "The type must be one is of: f,field,n,node. ( <i>I</i> nclude or <i>E</i> xclude ending index)"
 	}, {
 		"item" : "eval &lt;text&gt;",

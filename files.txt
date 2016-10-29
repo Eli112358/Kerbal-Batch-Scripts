@@ -1,2 +1,2 @@
-kspDataCli.cmd
-kspProfiles.cmd
+KspDataCli.cmd
+KspProfiles.cmd

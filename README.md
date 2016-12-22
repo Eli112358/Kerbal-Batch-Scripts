@@ -1,7 +1,12 @@
 # Kerbal-Batch-Scripts
 Some useful Batch scripts for [Kerbal Space Program](https://kerbalspaceprogram.com)
 
-## Progress
+##Development
+This project is due for deprecation, in favor of [Kerbal-Data-Manipulator
+](https://github.com/Eli112358/Kerbal-Data-Manipulator) and [Kerbal-Profile-Manager
+](https://github.com/Eli112358/Kerbal-Profile-Manager).
+
+## Functionality
 `KspDataCli` can load, display, modify and save data files; can also copy and paste entries<br>
 `KspProfiles` sets up the necessary folders and variables on first run
 

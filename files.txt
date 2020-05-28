@@ -1,2 +1,0 @@
-KspDataCli.cmd
-KspProfiles.cmd

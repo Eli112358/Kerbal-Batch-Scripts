@@ -1,4 +1,4 @@
-let data = {
+const data = {
 	'KspDataCli.cmd': [
 		{
 			item: "select [..|index]",

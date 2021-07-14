@@ -1,7 +1,7 @@
 # Kerbal-Batch-Scripts
 Some useful Batch scripts for [Kerbal Space Program](https://kerbalspaceprogram.com)
 
-##Development
+## Development
 This project is due for deprecation, in favor of [Kerbal-Data-Manipulator
 ](https://github.com/Eli112358/Kerbal-Data-Manipulator) and [Kerbal-Profile-Manager
 ](https://github.com/Eli112358/Kerbal-Profile-Manager).
